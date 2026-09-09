@@ -1,0 +1,55 @@
+.tx-cropper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.tx-cropper__frame {
+  position: relative;
+  width: 240px;
+  height: 320px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f0f0f0;
+  border: 2px dashed #c8c8c8;
+  flex: 0 0 auto;
+  touch-action: none;
+}
+.tx-cropper__frame canvas { display: block; }
+.tx-cropper__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 14px;
+  pointer-events: none;
+}
+.tx-cropper__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 180px;
+}
+.tx-cropper__file {
+  display: inline-block;
+  background: #d0021b;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+.tx-cropper__file:hover { background: #b0021a; }
+.tx-cropper__zoom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #444;
+}
+.tx-cropper__zoom input { width: 100%; }
+.tx-cropper__hint { font-size: 12px; color: #777; margin: 0; }

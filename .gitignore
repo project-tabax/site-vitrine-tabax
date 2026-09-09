@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.local
+.vite/
+
+# Artefacts de build TypeScript
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# Assets d'origine copiés depuis ../mirror-tabax (volumineux, reproductibles)
+# via `npm run sync-assets`.
+public/wp-content/
+public/wp-includes/
+public/_ext/

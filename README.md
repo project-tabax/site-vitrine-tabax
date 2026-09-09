@@ -1,0 +1,74 @@
+# Tabax Construire — version React
+
+Migration du site (WordPress/Elementor) vers **React 18 + TypeScript + Vite**.
+Objectif : **même design, même contenu, mêmes fonctionnalités** que l'original,
+avec une architecture propre et maintenable.
+
+## Stratégie de fidélité
+
+Le design est reproduit **à l'identique** en réutilisant le CSS/JS d'origine
+(thème ThemeREX « Progress » + Elementor + plugins). L'app ne réécrit pas les
+styles : elle ré-émet le markup d'origine et le sert avec ses feuilles de style,
+ce qui garantit un rendu pixel-identique sans risque de régression visuelle.
+L'amélioration porte sur **l'architecture, le typage et la maintenabilité**.
+
+Périmètre : les **9 pages du parti** (Accueil, Historique, Le Président, Projet
+de société, Actualité, Galerie, Contact, Adhésion, Don).
+
+## Démarrage
+
+```bash
+cd react-app
+npm install
+npm run prepare-mirror   # extrait les fragments + copie les assets d'origine dans public/
+npm run dev              # http://127.0.0.1:5173
+```
+
+`prepare-mirror` = `extract` (miroir → fragments React) + `sync-assets`
+(copie `wp-content/`, `wp-includes/`, `_ext/` depuis `../mirror-tabax` vers
+`public/`, non versionnés car volumineux et reproductibles).
+
+## Architecture
+
+```
+src/
+├── main.tsx / App.tsx        Point d'entrée + Router
+├── routes.tsx                Routage centralisé (généré depuis le manifeste)
+├── layouts/
+│   └── SiteLayout.tsx        Header + Outlet + Footer ; interception des liens internes
+├── components/
+│   ├── SiteHeader/Footer.tsx Header & footer communs (fragments d'origine)
+│   ├── CmsPage.tsx           Page générique : charge contenu + styles inline + réinit JS
+│   └── HtmlFragment.tsx      Rendu d'un fragment HTML d'origine
+├── pages/
+│   └── registry.ts           Point d'extension : slug → composant sur-mesure
+├── hooks/
+│   └── useOriginalAssets.ts  Injection unique des CSS/JS d'origine + réinit best-effort
+├── services/                 Points d'intégration back-end (typés, prêts à brancher)
+│   ├── apiClient.ts          Client HTTP (VITE_API_BASE_URL)
+│   ├── contactService.ts     POST /contact
+│   ├── membershipService.ts  Adhésion (Google Forms + POST /memberships)
+│   └── donationService.ts    POST /donations
+├── data/site.ts              Menu, contacts, réseaux, piliers (centralisé)
+├── content/                  Fragments générés (header, footer, pages/, inline/)
+└── generated/                pages.ts (manifeste) + assets.ts (union CSS/JS) — générés
+```
+
+### Principes
+
+- **Routage** centralisé et dérivé d'un manifeste (`generated/pages.ts`). Les
+  liens internes des fragments sont interceptés pour une navigation client.
+- **Séparation** claire pages / composants / layouts / services / hooks / données.
+- **Données et config centralisées** dans `data/` (aucune donnée en dur dispersée).
+- **Back-end à venir** : la couche `services/` fige les contrats ; tant que
+  `VITE_API_BASE_URL` n'est pas défini, les envois renvoient « non configuré ».
+- **Évolutivité** : chaque page peut être progressivement recodée en composants
+  natifs en l'enregistrant dans `pages/registry.ts`, sans toucher au routage.
+
+## Limites connues
+
+- L'interactivité pilotée par le JS d'origine (menu mobile, sliders, compteurs)
+  est réinitialisée en **best-effort** à chaque navigation client ; le rendu
+  visuel reste fidèle même si une interaction se dégrade.
+- Les fonctionnalités serveur (envoi contact, don, adhésion native) nécessitent
+  le back-end à brancher via `services/`.

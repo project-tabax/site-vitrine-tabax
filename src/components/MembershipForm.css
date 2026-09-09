@@ -1,0 +1,76 @@
+.tx-membership {
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+}
+.tx-membership__row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.tx-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+.tx-field--grow { flex: 1 1 200px; }
+.tx-field__label { font-weight: 600; color: #222; }
+/* Sélecteurs scopés + !important pour neutraliser le style d'input du thème
+   (bordure « soulignée ») et garder une présentation homogène. */
+.tx-membership .tx-field input,
+.tx-membership .tx-field select,
+.tx-membership .tx-field textarea {
+  padding: 11px 13px !important;
+  border: 1px solid #cfcfcf !important;
+  border-radius: 8px !important;
+  font-size: 15px;
+  font-family: inherit;
+  background: #fff !important;
+  color: #222 !important;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: none !important;
+}
+.tx-membership .tx-field input:focus,
+.tx-membership .tx-field select:focus,
+.tx-membership .tx-field textarea:focus {
+  outline: none;
+  border-color: #d0021b !important;
+  box-shadow: 0 0 0 3px rgba(208, 2, 27, 0.12) !important;
+}
+.tx-field--error input,
+.tx-field--error select,
+.tx-field--error textarea { border-color: #d0021b; }
+.tx-field__error { color: #d0021b; font-size: 12px; }
+
+.tx-membership__label { font-weight: 600; color: #222; font-size: 14px; }
+.tx-membership__photo { display: flex; flex-direction: column; gap: 10px; }
+
+.tx-membership__submit {
+  align-self: flex-start;
+  background: #d0021b;
+  color: #fff;
+  border: 0;
+  padding: 13px 40px;
+  border-radius: 28px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.tx-membership__submit:hover { background: #b0021a; }
+.tx-membership__submit:disabled { opacity: 0.6; cursor: default; }
+
+.tx-membership--done {
+  text-align: center;
+  padding: 40px 20px;
+}
+.tx-membership--done h3 { color: #d0021b; margin: 0 0 10px; }
+
+@media (max-width: 600px) {
+  .tx-membership__row { flex-direction: column; gap: 14px; }
+}
