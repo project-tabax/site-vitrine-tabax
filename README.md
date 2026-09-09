@@ -28,6 +28,85 @@ npm run dev              # http://127.0.0.1:5173
 (copie `wp-content/`, `wp-includes/`, `_ext/` depuis `../mirror-tabax` vers
 `public/`, non versionnés car volumineux et reproductibles).
 
+## Déploiement VPS avec PM2
+
+Cette application est pensée pour être déployée comme un site statique servi
+depuis un VPS. Le principe est simple :
+
+1. cloner les deux dépôts séparément sur le serveur,
+2. installer les dépendances,
+3. synchroniser les assets depuis `mirror-tabax`,
+4. builder l'application,
+5. servir le dossier `dist/` avec PM2.
+
+### Arborescence recommandée sur le VPS
+
+```bash
+/var/www/site-tabax/
+├── mirror-tabax/
+└── react-app/
+```
+
+### Prérequis serveur
+
+- `git`
+- `node` et `npm`
+- `pm2`
+
+### Étapes de déploiement
+
+```bash
+# 1) Créer le dossier de travail
+sudo mkdir -p /var/www/site-tabax
+sudo chown -R $USER:$USER /var/www/site-tabax
+cd /var/www/site-tabax
+
+# 2) Cloner les deux dépôts séparément
+git clone git@github.com:project-tabax/site-vitrine-tabax.git react-app
+git clone git@github.com:project-tabax/mirror-tabax.git mirror-tabax
+
+# 3) Installer l'application React
+cd /var/www/site-tabax/react-app
+npm ci
+
+# 4) Préparer les assets d'origine depuis mirror-tabax
+npm run prepare-mirror
+
+# 5) Builder la version de production
+npm run build
+
+# 6) Servir dist/ avec PM2
+pm2 start "npx serve -s dist -l 4173" --name tabax-react
+
+# 7) Sauvegarder le process PM2
+pm2 save
+pm2 startup
+```
+
+### Mise à jour
+
+Quand une nouvelle version est poussée sur GitHub :
+
+```bash
+cd /var/www/site-tabax/react-app
+git pull
+npm ci
+npm run prepare-mirror
+npm run build
+pm2 restart tabax-react
+```
+
+### Variante avec écosystème PM2
+
+Si tu préfères, tu peux remplacer la commande `npx serve` par un fichier
+`ecosystem.config.cjs` et démarrer le site avec :
+
+```bash
+pm2 start ecosystem.config.cjs
+```
+
+Dans ce cas, le serveur PM2 doit pointer vers `dist/` après le build.
+
 ## Architecture
 
 ```
