@@ -33,17 +33,14 @@ npm run dev              # http://127.0.0.1:5173
 Cette application est pensée pour être déployée comme un site statique servi
 depuis un VPS. Le principe est simple :
 
-1. cloner les deux dépôts séparément sur le serveur,
-2. installer les dépendances,
-3. synchroniser les assets depuis `mirror-tabax`,
-4. builder l'application,
-5. servir le dossier `dist/` avec PM2.
+1. cloner le dépôt React sur le serveur,
+2. lancer `deploy.sh`,
+3. servir le dossier `dist/` avec PM2.
 
 ### Arborescence recommandée sur le VPS
 
 ```bash
 /var/www/site-tabax/
-├── mirror-tabax/
 └── react-app/
 ```
 
@@ -61,40 +58,29 @@ sudo mkdir -p /var/www/site-tabax
 sudo chown -R $USER:$USER /var/www/site-tabax
 cd /var/www/site-tabax
 
-# 2) Cloner les deux dépôts séparément
+# 2) Cloner le dépôt React
 git clone git@github.com:project-tabax/site-vitrine-tabax.git react-app
-git clone git@github.com:project-tabax/mirror-tabax.git mirror-tabax
 
-# 3) Installer l'application React
+# 3) Rendre le script exécutable et lancer le déploiement
 cd /var/www/site-tabax/react-app
-npm ci
+chmod +x deploy.sh
+./deploy.sh
 
-# 4) Préparer les assets d'origine depuis mirror-tabax
-npm run prepare-mirror
-
-# 5) Builder la version de production
-npm run build
-
-# 6) Servir dist/ avec PM2
-pm2 start "npx serve -s dist -l 4173" --name tabax-react
-
-# 7) Sauvegarder le process PM2
-pm2 save
+# 4) Initialiser PM2 au démarrage du serveur, une seule fois
 pm2 startup
 ```
 
 ### Mise à jour
 
-Quand une nouvelle version est poussée sur GitHub :
+Quand une nouvelle version est poussée sur GitHub, relance simplement :
 
 ```bash
 cd /var/www/site-tabax/react-app
-git pull
-npm ci
-npm run prepare-mirror
-npm run build
-pm2 restart tabax-react
+./deploy.sh
 ```
+
+Le script affiche à la fin le port utilisé et l'URL de test sur l'IP du
+serveur.
 
 ### Variante avec écosystème PM2
 
