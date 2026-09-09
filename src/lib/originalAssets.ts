@@ -2,6 +2,10 @@ import { cssLinks } from "@/generated/assets";
 
 // Gestion des assets d'origine (CSS + JS) pour un rendu fidèle.
 
+const ORIGIN_BASE_URL =
+  (import.meta.env.VITE_ORIGINAL_SITE_BASE_URL as string | undefined) ??
+  "https://tabax-construire.com";
+
 export interface PageScript {
   src?: string;
   code?: string;
@@ -11,6 +15,11 @@ let stylesInstalled = false;
 let stickyInstalled = false;
 const loadedSrc = new Set<string>();
 
+function resolveOriginalAssetUrl(url: string): string {
+  if (!url.startsWith("/")) return url;
+  return `${ORIGIN_BASE_URL}${url}`;
+}
+
 /**
  * Installe les feuilles de style d'origine dans le <head> AVANT le premier
  * rendu (cascade correcte : liens globaux d'abord, styles inline de page ensuite).
@@ -19,11 +28,12 @@ export function installOriginalStyles(): void {
   if (stylesInstalled) return;
   stylesInstalled = true;
   for (const href of cssLinks) {
-    if (document.querySelector(`link[data-orig="${href}"]`)) continue;
+    const resolvedHref = resolveOriginalAssetUrl(href);
+    if (document.querySelector(`link[data-orig="${resolvedHref}"]`)) continue;
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = href;
-    link.dataset.orig = href;
+    link.href = resolvedHref;
+    link.dataset.orig = resolvedHref;
     document.head.appendChild(link);
   }
 
@@ -36,13 +46,14 @@ export function installOriginalStyles(): void {
 }
 
 function loadSrc(src: string): Promise<void> {
-  if (loadedSrc.has(src)) return Promise.resolve();
-  loadedSrc.add(src);
+  const resolvedSrc = resolveOriginalAssetUrl(src);
+  if (loadedSrc.has(resolvedSrc)) return Promise.resolve();
+  loadedSrc.add(resolvedSrc);
   return new Promise((resolve) => {
     const s = document.createElement("script");
-    s.src = src;
+    s.src = resolvedSrc;
     s.async = false;
-    s.dataset.orig = src;
+    s.dataset.orig = resolvedSrc;
     s.onload = () => resolve();
     s.onerror = () => resolve(); // un asset manquant ne doit pas bloquer la suite
     document.body.appendChild(s);

@@ -5,7 +5,6 @@ APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PORT="${PORT:-4173}"
 PM2_NAME="${PM2_NAME:-tabax-react}"
 HOST="${HOST:-0.0.0.0}"
-START_COMMAND="npx serve -s dist -l tcp://${HOST}:${PORT}"
 
 cd "$APP_DIR"
 
@@ -22,18 +21,14 @@ git pull --ff-only
 echo "[2/4] Installation des dépendances"
 npm install
 
-echo "[3/4] Build de production"
-if ! npm run build; then
-  echo "Avertissement: la vérification TypeScript a échoué, on poursuit avec un build Vite direct."
-  npx vite build
-fi
+echo "[3/4] Démarrage du serveur de développement"
 
 echo "[4/4] Redémarrage PM2"
 if pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
-  pm2 restart "$PM2_NAME" --update-env
-else
-  pm2 start "$START_COMMAND" --name "$PM2_NAME"
+  pm2 delete "$PM2_NAME"
 fi
+
+pm2 start npm --name "$PM2_NAME" -- run dev -- --host "$HOST" --port "$PORT"
 
 pm2 save
 
@@ -43,7 +38,7 @@ if [ -z "${SERVER_IP:-}" ]; then
 fi
 
 echo ""
-echo "Déploiement terminé."
+echo "Déploiement terminé en mode développement."
 echo "Port: $PORT"
 echo "URL locale: http://127.0.0.1:$PORT"
 echo "URL réseau: http://${SERVER_IP}:$PORT"
