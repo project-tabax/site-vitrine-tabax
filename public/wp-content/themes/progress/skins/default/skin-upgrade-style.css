@@ -1,0 +1,91 @@
+.post_item_404 .page_title {
+  font-size: 22.4vw;
+  letter-spacing: -0.04em;
+  color: var(--theme-color-text_link2);
+}
+.post_item_404 .page_subtitle {
+  font-size: 3.353em;
+}
+.post_item_404 .page_description {
+  font-size: 1rem;
+}
+.post_item_404 .post_content .all-svg {
+  display: none;
+}
+
+.sc_portfolio.sc_portfolio_extra .sc_portfolio_item .post_featured .post_info .post_title {
+  background-color: var(--theme-color-bg_color);
+}
+.sc_portfolio.sc_portfolio_extra .sc_portfolio_item .post_featured .post_info .post_title a {
+  color: var(--theme-color-text_dark) !important;
+}
+.sc_portfolio.sc_portfolio_extra .sc_portfolio_item .post_featured .post_info .post_meta .post_categories {
+  background-color: var(--theme-color-bg_color);
+}
+.sc_portfolio.sc_portfolio_extra .sc_portfolio_item .post_featured .post_info .post_meta .post_categories a,
+.sc_portfolio.sc_portfolio_extra .sc_portfolio_item .post_featured .post_info .post_meta .post_categories span {
+  color: var(--theme-color-text_dark) !important;
+}
+.sc_portfolio.sc_portfolio_extra.sc_portfolio_eclipse .sc_portfolio_item .post_featured .mask {
+  background-color: var(--theme-color-bg_color);
+}
+
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_7 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .sc_blogger_item_title,
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_9 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .sc_blogger_item_title {
+  background-color: var(--theme-color-bg_color);
+}
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_7 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .sc_blogger_item_title a,
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_9 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .sc_blogger_item_title a {
+  color: var(--theme-color-text_dark) !important;
+}
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_7 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .post_meta .post_categories,
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_9 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .post_meta .post_categories {
+  background-color: var(--theme-color-bg_color);
+}
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_7 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .post_meta .post_categories a,
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_7 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .post_meta .post_categories span,
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_9 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .post_meta .post_categories a,
+.sc_blogger_lay_portfolio_grid.sc_blogger_lay_portfolio_grid_grid_style_9 .sc_blogger_item .sc_blogger_item_body .post_featured .post_info_bl .post_meta .post_categories span {
+  color: var(--theme-color-text_dark) !important;
+}
+
+.sc_services_motley [class*="column-"]:nth-child(3n-1) .sc_services_item.with_image:hover .sc_services_item_content:before,
+.sc_services_motley [class*="column-"]:nth-child(3n) .sc_services_item.with_image:hover .sc_services_item_content:before,
+.sc_services_motley .slider-slide:nth-child(3n-1) .sc_services_item.with_image:hover .sc_services_item_content:before,
+.sc_services_motley .slider-slide:nth-child(3n) .sc_services_item.with_image:hover .sc_services_item_content:before {
+  opacity: 0.2;
+}
+
+.extra_form_styles #style-7.mc4wp-form label {
+  color: var(--theme-color-extra_text);
+}
+.extra_form_styles #style-7.mc4wp-form label a {
+  color: var(--theme-color-extra_text);
+  border-color: var(--theme-color-extra_text);
+}
+.extra_form_styles #style-7.mc4wp-form label a:hover {
+  color: var(--theme-color-extra_text_07);
+  border-color: var(--theme-color-extra_text_07);
+}
+
+#style-8.mc4wp-form .mc4wp-form-fields input[type="email"] {
+  border-color: var(--theme-color-alter_bd_hover);
+}
+
+#style-10.mc4wp-form .mc4wp-form-fields input[type="email"] {
+  -webkit-box-shadow: none !important;
+  -ms-box-shadow: none !important;
+  box-shadow: none !important;
+  background-color: var(--theme-color-bg_color) !important;
+}
+
+@media (max-width: 767px) {
+  .post_item_404 .page_title {
+    font-size: 150px;
+  }
+  .post_item_404 .page_subtitle {
+    font-size: 37px;
+  }
+}
+
+/*# sourceMappingURL=skin-upgrade-style.css.map */

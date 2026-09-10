@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { HtmlFragment } from "./HtmlFragment";
 import { Gallery } from "./Gallery";
 import { MembershipForm } from "./MembershipForm";
-import { runPageScripts, type PageScript } from "@/lib/originalAssets";
+import { runPageScripts, rewriteExternalMedia, type PageScript } from "@/lib/originalAssets";
 import { galleries } from "@/generated/natives";
 
 interface NativeSlot {
@@ -95,6 +95,7 @@ export function CmsPage({ slug, title, bodyClass, htmlClass }: Props) {
       <HtmlFragment
         html={html}
         onMounted={(container) => {
+          rewriteExternalMedia(container);
           void runPageScripts(scriptsRef.current);
           const nodes = Array.from(
             container.querySelectorAll<HTMLElement>("[data-native]")

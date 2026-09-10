@@ -8,8 +8,10 @@ dist/
 vite.config.js
 vite.config.d.ts
 
-# Assets d'origine copiés depuis ../mirror-tabax (volumineux, reproductibles)
-# via `npm run sync-assets`.
-public/wp-content/
-public/wp-includes/
-public/_ext/
+# Les assets d'origine réellement utilisés par la vitrine sont versionnés
+# (repo autonome). Le dossier public/ est élagué par `npm run prune-assets`
+# pour ne garder que les fichiers référencés (voir scripts/prune-assets.mjs).
+#
+# Exception : les médias trop lourds pour git — servis depuis le site d'origine
+# (voir EXTERNAL_ASSETS dans src/lib/originalAssets.ts).
+public/wp-content/uploads/**/*.mp4

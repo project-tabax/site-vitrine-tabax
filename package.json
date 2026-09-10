@@ -7,7 +7,8 @@
   "scripts": {
     "extract": "node scripts/extract.mjs",
     "sync-assets": "node scripts/sync-assets.mjs",
-    "prepare-mirror": "npm run extract && npm run sync-assets",
+    "prune-assets": "node scripts/prune-assets.mjs",
+    "prepare-mirror": "npm run extract && npm run sync-assets && npm run prune-assets",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
@@ -22,6 +23,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "cheerio": "^1.0.0",
+    "serve": "^14.2.6",
     "typescript": "^5.5.4",
     "vite": "^5.4.6"
   }

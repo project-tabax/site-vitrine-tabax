@@ -2,9 +2,18 @@ import { cssLinks } from "@/generated/assets";
 
 // Gestion des assets d'origine (CSS + JS) pour un rendu fidèle.
 
+// Les assets d'origine (CSS, JS, images, polices) sont copiés dans public/ et
+// servis à leurs chemins racine ("/wp-content/…"), même origine que l'app : plus
+// aucun problème CORS (notamment sur les polices). Base vide = chemin local tel quel.
 const ORIGIN_BASE_URL =
-  (import.meta.env.VITE_ORIGINAL_SITE_BASE_URL as string | undefined) ??
-  "https://tabax-construire.com";
+  (import.meta.env.VITE_ORIGINAL_SITE_BASE_URL as string | undefined) ?? "";
+
+// Médias trop volumineux pour être versionnés (voir .gitignore) : servis depuis
+// le site d'origine. Une <video>/<img> cross-origin s'affiche sans CORS.
+const EXTERNAL_MEDIA_BASE_URL = "https://tabax-construire.com";
+const EXTERNAL_ASSETS = new Set<string>([
+  "/wp-content/uploads/2025/12/XEL-YI-DAL-XOL-YI-FEEX-POOS-YI-FEES.mp4",
+]);
 
 export interface PageScript {
   src?: string;
@@ -18,6 +27,22 @@ const loadedSrc = new Set<string>();
 function resolveOriginalAssetUrl(url: string): string {
   if (!url.startsWith("/")) return url;
   return `${ORIGIN_BASE_URL}${url}`;
+}
+
+/**
+ * Réécrit les médias externalisés (non versionnés) vers le site d'origine après
+ * injection d'un fragment. À appeler sur le conteneur monté.
+ */
+export function rewriteExternalMedia(root: ParentNode): void {
+  root
+    .querySelectorAll<HTMLElement>("video[src], source[src], img[src]")
+    .forEach((el) => {
+      const src = el.getAttribute("src");
+      if (!src) return;
+      if (EXTERNAL_ASSETS.has(src.split("?")[0])) {
+        el.setAttribute("src", `${EXTERNAL_MEDIA_BASE_URL}${src}`);
+      }
+    });
 }
 
 /**

@@ -78,16 +78,23 @@ for (const file of files) {
 
   // Scripts dans l'ordre du document (inline + externes) : nécessaires pour
   // rejouer l'initialisation JS (config Elementor avant elementor-frontend, etc.).
+  // Seuls les scripts JS classiques sont rejoués. Les blocs de données non-JS
+  // (application/json, importmap, speculationrules, ld+json, text/template…)
+  // ne doivent pas être exécutés : injectés comme du code ils lèvent une
+  // SyntaxError (ex. « Unexpected token ':' » sur un objet JSON).
+  const JS_INLINE_TYPES = new Set(["", "text/javascript", "application/javascript"]);
   const scripts = [];
   $("script").each((_, el) => {
     const $el = $(el);
-    if (($el.attr("type") || "").toLowerCase() === "application/ld+json") return;
     const src = $el.attr("src");
-    if (src) scripts.push({ src });
-    else {
-      const code = $el.html() || "";
-      if (code.trim()) scripts.push({ code });
+    if (src) {
+      scripts.push({ src });
+      return;
     }
+    const type = ($el.attr("type") || "").toLowerCase();
+    if (!JS_INLINE_TYPES.has(type)) return;
+    const code = $el.html() || "";
+    if (code.trim()) scripts.push({ code });
   });
   fs.writeFileSync(path.join(OUT_SCRIPTS, `${slug}.json`), JSON.stringify(scripts));
 

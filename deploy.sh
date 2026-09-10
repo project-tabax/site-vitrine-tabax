@@ -21,14 +21,16 @@ git pull --ff-only
 echo "[2/4] Installation des dépendances"
 npm install
 
-echo "[3/4] Démarrage du serveur de développement"
+echo "[3/4] Build de production"
+npm run build
 
-echo "[4/4] Redémarrage PM2"
+echo "[4/4] (Re)démarrage PM2 — service statique de dist/"
 if pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
   pm2 delete "$PM2_NAME"
 fi
 
-pm2 start npm --name "$PM2_NAME" -- run dev -- --host "$HOST" --port "$PORT"
+# Sert le build statique dist/ (SPA : fallback index.html) via `npx serve`.
+pm2 start npx --name "$PM2_NAME" -- serve -s dist -l "$PORT"
 
 pm2 save
 
@@ -38,7 +40,7 @@ if [ -z "${SERVER_IP:-}" ]; then
 fi
 
 echo ""
-echo "Déploiement terminé en mode développement."
+echo "Déploiement terminé (build de production servi depuis dist/)."
 echo "Port: $PORT"
 echo "URL locale: http://127.0.0.1:$PORT"
 echo "URL réseau: http://${SERVER_IP}:$PORT"
